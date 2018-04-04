@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="PermissionsInfo">Przejdź do Ustawień, aby nadać aplikacji uprawnienia.</string>
+    <string name="BetaMessage">Aplikacja jest w fazie Beta. Nic nie działa i nie wiadomo, dlaczego.</string>
+    <string name="Button_Cancel">Anuluj</string>
+</resources>

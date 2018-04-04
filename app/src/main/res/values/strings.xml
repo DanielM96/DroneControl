@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name" translatable="false">DroneControl</string>
+    <string name="PermissionsInfo">Go to Settings to enable permissions for this app.</string>
+    <string name="BetaHeader" translatable="false">BETA</string>
+    <string name="BetaMessage">The application is in Beta phase. Nothing works and nobody knows why.</string>
+    <string name="Button_OK" translatable="false">OK</string>
+    <string name="Button_Cancel">Cancel</string>
+</resources>
