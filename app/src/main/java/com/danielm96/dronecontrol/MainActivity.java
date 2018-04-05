@@ -23,7 +23,7 @@ import java.util.Map;
  *
  * Na początku wyświetlana jest informacja o wersji beta.
  * Następnie aplikacja prosi o przyznanie uprawnień.
- * Wymagane są uprawnienia "na oko". Co jest naprawdę potrzebne, okaże się później...
+ * Wymagane są uprawnienia "na oko". Co jest naprawdę potrzebne, okaże się podczas testów.
  */
 
 public class MainActivity extends AppCompatActivity
@@ -59,17 +59,40 @@ public class MainActivity extends AppCompatActivity
     {
         int NeededPermissionsCount = 0;
         // uprawnienia dotyczące Wi-Fi
+        // odczytywanie stanu Wi-Fi
+        /*
         int WiFiStatePermission = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_WIFI_STATE);
         if (WiFiStatePermission != PackageManager.PERMISSION_GRANTED)
         {
             requestPermissions(new String[]{Manifest.permission.ACCESS_WIFI_STATE},1);
             NeededPermissionsCount++;
         }
+        */
 
+        // zmiana stanu Wi-Fi
         int WiFiChangePermission = ContextCompat.checkSelfPermission(this, Manifest.permission.CHANGE_WIFI_STATE);
         if (WiFiChangePermission != PackageManager.PERMISSION_GRANTED)
         {
             requestPermissions(new String[]{Manifest.permission.CHANGE_WIFI_STATE},1);
+            NeededPermissionsCount++;
+        }
+
+        // uprawnienia dotyczące sieci
+        // odczytywanie stanu sieci
+        /*
+        int NetworkStatePermission = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_NETWORK_STATE);
+        if (NetworkStatePermission != PackageManager.PERMISSION_GRANTED)
+        {
+            requestPermissions(new String[]{Manifest.permission.ACCESS_NETWORK_STATE},1);
+            NeededPermissionsCount++;
+        }
+        */
+
+        // zmiana stanu sieci
+        int NetworkChangePermission = ContextCompat.checkSelfPermission(this, Manifest.permission.CHANGE_NETWORK_STATE);
+        if (NetworkChangePermission != PackageManager.PERMISSION_GRANTED)
+        {
+            requestPermissions(new String[]{Manifest.permission.CHANGE_NETWORK_STATE},1);
             NeededPermissionsCount++;
         }
 
@@ -83,8 +106,8 @@ public class MainActivity extends AppCompatActivity
         if (requestCode == 1)
         {
             Map<String, Integer> perms = new HashMap<>();
-            perms.put(Manifest.permission.ACCESS_WIFI_STATE, PackageManager.PERMISSION_GRANTED);
             perms.put(Manifest.permission.CHANGE_WIFI_STATE, PackageManager.PERMISSION_GRANTED);
+            perms.put(Manifest.permission.CHANGE_NETWORK_STATE, PackageManager.PERMISSION_GRANTED);
 
             if (grantResults.length > 0)
             {
@@ -93,14 +116,14 @@ public class MainActivity extends AppCompatActivity
                     perms.put(permissions[i], grantResults[i]);
                 }
                 // przyznano oba uprawnienia
-                if (perms.get(Manifest.permission.ACCESS_WIFI_STATE) == PackageManager.PERMISSION_GRANTED && perms.get(Manifest.permission.CHANGE_WIFI_STATE) == PackageManager.PERMISSION_GRANTED)
+                if (perms.get(Manifest.permission.CHANGE_WIFI_STATE) == PackageManager.PERMISSION_GRANTED && perms.get(Manifest.permission.CHANGE_NETWORK_STATE) == PackageManager.PERMISSION_GRANTED)
                 {
                     // ...
                 }
                 else
                 {
                     // nie przyznano uprawnień, zaznaczono "Nie pytaj ponownie"
-                    if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_WIFI_STATE) || ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.CHANGE_WIFI_STATE))
+                    if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.CHANGE_WIFI_STATE) || ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.CHANGE_NETWORK_STATE))
                     {
                         showDialogOK(getString(R.string.PermissionsInfo), new DialogInterface.OnClickListener()
                         {
