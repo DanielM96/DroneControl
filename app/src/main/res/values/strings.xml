@@ -5,4 +5,14 @@
     <string name="BetaMessage">The application is in Beta phase. Nothing works and nobody knows why.</string>
     <string name="Button_OK" translatable="false">OK</string>
     <string name="Button_Cancel">Cancel</string>
+    <string name="DroneImage" translatable="false">Drone</string>
+    <string name="arrowDown">Arrow Down</string>
+    <string name="arrowUp">Arrow Up</string>
+    <string name="arrowLeft">Arrow Left</string>
+    <string name="arrowRight">Arrow Right</string>
+    <string name="rotateLeft">Rotate Left</string>
+    <string name="rotateRight">Rotate Right</string>
+    <string name="heightUp">Height Up</string>
+    <string name="heightDown">Height Down</string>
+    <string name="settings">Settings</string>
 </resources>

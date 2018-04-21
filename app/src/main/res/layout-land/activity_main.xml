@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:contentDescription="@string/app_name"
     tools:context=".MainActivity">
 
     <ImageView
@@ -13,22 +12,10 @@
         android:layout_height="96dp"
         android:contentDescription="@string/DroneImage"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/dron_front_256x256" />
-
-    <ImageButton
-        android:id="@+id/arrowDown"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:contentDescription="@string/arrowDown"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/droneIcon"
-        app:srcCompat="@drawable/ic_keyboard_arrow_down_white_18dp" />
 
     <ImageButton
         android:id="@+id/arrowUp"
@@ -36,10 +23,19 @@
         android:layout_height="wrap_content"
         android:contentDescription="@string/arrowUp"
         app:layout_constraintBottom_toTopOf="@+id/droneIcon"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
         app:srcCompat="@drawable/ic_keyboard_arrow_up_white_18dp" />
+
+    <ImageButton
+        android:id="@+id/arrowDown"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/arrowDown"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/droneIcon"
+        app:srcCompat="@drawable/ic_keyboard_arrow_down_white_18dp" />
 
     <ImageButton
         android:id="@+id/arrowLeft"
@@ -57,7 +53,7 @@
         android:layout_height="wrap_content"
         android:contentDescription="@string/arrowRight"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/droneIcon"
+        app:layout_constraintLeft_toRightOf="@+id/droneIcon"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_keyboard_arrow_right_white_18dp" />
 
@@ -67,7 +63,7 @@
         android:layout_height="wrap_content"
         android:contentDescription="@string/rotateLeft"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/arrowLeft"
+        app:layout_constraintRight_toLeftOf="@+id/arrowLeft"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_rotate_left_white_18dp" />
 
@@ -77,9 +73,23 @@
         android:layout_height="wrap_content"
         android:contentDescription="@string/rotateRight"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/arrowRight"
+        app:layout_constraintLeft_toRightOf="@+id/arrowRight"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_rotate_right_white_18dp" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guidelineH"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.5" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guidelineV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_end="25dp" />
 
     <ImageButton
         android:id="@+id/heightUp"
@@ -88,44 +98,30 @@
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:contentDescription="@string/heightUp"
-        app:layout_constraintBottom_toBottomOf="@+id/guidelineH"
+        app:layout_constraintBottom_toTopOf="@+id/guidelineH"
         app:layout_constraintRight_toLeftOf="@+id/guidelineV"
         app:srcCompat="@android:drawable/arrow_up_float" />
-
-    <android.support.constraint.Guideline
-        android:id="@+id/guidelineH"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_end="50dp" />
-
-    <android.support.constraint.Guideline
-        android:id="@+id/guidelineV"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.5" />
 
     <ImageButton
         android:id="@+id/heightDown"
         android:layout_width="54dp"
         android:layout_height="54dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="8dp"
         android:contentDescription="@string/heightDown"
-        app:layout_constraintBottom_toTopOf="@+id/guidelineH"
-        app:layout_constraintLeft_toRightOf="@+id/guidelineV"
+        app:layout_constraintRight_toLeftOf="@+id/guidelineV"
+        app:layout_constraintTop_toBottomOf="@+id/guidelineH"
         app:srcCompat="@android:drawable/arrow_down_float" />
 
     <ImageButton
         android:id="@+id/settingsButton"
         android:layout_width="36dp"
         android:layout_height="36dp"
-        android:layout_marginBottom="16dp"
         android:layout_marginEnd="16dp"
+        android:layout_marginTop="16dp"
         android:contentDescription="@string/settings"
-        app:layout_constraintBottom_toTopOf="@+id/guidelineH"
-        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/guidelineV"
+        app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/settings_blackbg" />
 
 </android.support.constraint.ConstraintLayout>

@@ -10,6 +10,9 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import java.util.HashMap;
@@ -33,13 +36,13 @@ public class MainActivity extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        // informacja o wersji beta
+        // Informacja o wersji beta
         showBetaDialog();
 
-        // jeśli przyznano uprawnienia, to kontynuuj działanie
+        // Jeśli przyznano uprawnienia, to kontynuuj działanie
         if (checkPermissions())
         {
-            // ...
+            startApp();
         }
     }
 
@@ -54,12 +57,12 @@ public class MainActivity extends AppCompatActivity
         dialog.show();
     }
 
-    // sprawdzanie uprawnień
+    // Sprawdzanie uprawnień
     private boolean checkPermissions()
     {
         int NeededPermissionsCount = 0;
-        // uprawnienia dotyczące Wi-Fi
-        // odczytywanie stanu Wi-Fi
+        // Uprawnienia dotyczące Wi-Fi
+        // Odczytywanie stanu Wi-Fi
         /*
         int WiFiStatePermission = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_WIFI_STATE);
         if (WiFiStatePermission != PackageManager.PERMISSION_GRANTED)
@@ -69,7 +72,7 @@ public class MainActivity extends AppCompatActivity
         }
         */
 
-        // zmiana stanu Wi-Fi
+        // Zmiana stanu Wi-Fi
         int WiFiChangePermission = ContextCompat.checkSelfPermission(this, Manifest.permission.CHANGE_WIFI_STATE);
         if (WiFiChangePermission != PackageManager.PERMISSION_GRANTED)
         {
@@ -77,8 +80,8 @@ public class MainActivity extends AppCompatActivity
             NeededPermissionsCount++;
         }
 
-        // uprawnienia dotyczące sieci
-        // odczytywanie stanu sieci
+        // Uprawnienia dotyczące sieci
+        // Odczytywanie stanu sieci
         /*
         int NetworkStatePermission = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_NETWORK_STATE);
         if (NetworkStatePermission != PackageManager.PERMISSION_GRANTED)
@@ -88,7 +91,7 @@ public class MainActivity extends AppCompatActivity
         }
         */
 
-        // zmiana stanu sieci
+        // Zmiana stanu sieci
         int NetworkChangePermission = ContextCompat.checkSelfPermission(this, Manifest.permission.CHANGE_NETWORK_STATE);
         if (NetworkChangePermission != PackageManager.PERMISSION_GRANTED)
         {
@@ -99,7 +102,7 @@ public class MainActivity extends AppCompatActivity
         return (NeededPermissionsCount == 0);
     }
 
-    // przyznawanie uprawnień
+    // Przyznawanie uprawnień
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults)
     {
@@ -115,14 +118,14 @@ public class MainActivity extends AppCompatActivity
                 {
                     perms.put(permissions[i], grantResults[i]);
                 }
-                // przyznano oba uprawnienia
+                // Przyznano oba uprawnienia
                 if (perms.get(Manifest.permission.CHANGE_WIFI_STATE) == PackageManager.PERMISSION_GRANTED && perms.get(Manifest.permission.CHANGE_NETWORK_STATE) == PackageManager.PERMISSION_GRANTED)
                 {
-                    // ...
+                    startApp();
                 }
                 else
                 {
-                    // nie przyznano uprawnień, zaznaczono "Nie pytaj ponownie"
+                    // Nie przyznano uprawnień, nie zaznaczono "Nie pytaj ponownie"
                     if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.CHANGE_WIFI_STATE) || ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.CHANGE_NETWORK_STATE))
                     {
                         showDialogOK(getString(R.string.PermissionsInfo), new DialogInterface.OnClickListener()
@@ -160,7 +163,7 @@ public class MainActivity extends AppCompatActivity
                     }
                     else
                     {
-                        // nie przyznano uprawnień, zaznaczono "Nie pytaj ponownie"
+                        // Nie przyznano uprawnień, zaznaczono "Nie pytaj ponownie"
                         Toast.makeText(this, R.string.PermissionsInfo,Toast.LENGTH_SHORT).show();
                         Thread close_thread = new Thread()
                         {
@@ -194,5 +197,129 @@ public class MainActivity extends AppCompatActivity
                 .setNegativeButton(R.string.Button_Cancel, okListener)
                 .create()
                 .show();
+    }
+
+    // Uruchamianie właściwej części aplikacji
+    // Tworzenie przycisków, obrazu
+    private void startApp()
+    {
+        // Wszystkie przyciski w MainActivity są typu ImageButton
+        ImageButton arrowUp,
+                    arrowDown,
+                    arrowLeft,
+                    arrowRight,
+                    rotateLeft,
+                    rotateRight,
+                    heightUp,
+                    heightDown,
+                    settingsButton;
+
+        // Obraz drona
+        ImageView droneView = findViewById(R.id.droneIcon);
+        droneView.setImageResource(R.drawable.dron_front_256x256);
+
+        // Tworzenie przycisków
+        arrowUp = findViewById(R.id.arrowUp);
+        arrowDown = findViewById(R.id.arrowDown);
+        arrowLeft = findViewById(R.id.arrowLeft);
+        arrowRight = findViewById(R.id.arrowRight);
+        rotateLeft = findViewById(R.id.rotateLeft);
+        rotateRight = findViewById(R.id.rotateRight);
+        heightUp = findViewById(R.id.heightUp);
+        heightDown = findViewById(R.id.heightDown);
+        settingsButton = findViewById(R.id.settingsButton);
+
+        // Metody setOnClickListener, które pozwalają wykonać kod po naciśnięciu przycisku
+        // TODO - Wysyłanie przez Wi-Fi
+
+        // arrowUp - przechył do przodu
+        arrowUp.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                // Wysłanie komendy przez Wi-Fi
+            }
+        });
+
+        // arrowDown - przechył do tyłu
+        arrowDown.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                // Wysłanie komendy przez Wi-Fi
+            }
+        });
+
+        // arrowLeft - przechył w lewo
+        arrowLeft.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                // Wysłanie komendy przez Wi-Fi
+            }
+        });
+
+        // arrowRight - przechył w prawo
+        arrowRight.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                // Wysłanie komendy przez Wi-Fi
+            }
+        });
+
+        // rotateLeft - obrót w lewo wokół osi pionowej
+        rotateLeft.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                // Wysłanie komendy przez Wi-Fi
+            }
+        });
+
+        // rotateRight - obrót w prawo wokół osi pionowej
+        rotateRight.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                // Wysłanie komendy przez Wi-Fi
+            }
+        });
+
+        // heightUp - zwiększenie pułapu lotu
+        heightUp.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                // Wysłanie komendy przez Wi-Fi
+            }
+        });
+
+        // heightDown - zmniejszenie pułapu lotu
+        heightDown.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                // Wysłanie komendy przez Wi-Fi
+            }
+        });
+
+        // settingsButton - przejście do ustawień
+        settingsButton.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                // TODO - AppSettings
+            }
+        });
     }
 }

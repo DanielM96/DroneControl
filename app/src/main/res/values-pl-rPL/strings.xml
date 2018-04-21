@@ -3,4 +3,13 @@
     <string name="PermissionsInfo">Przejdź do Ustawień, aby nadać aplikacji uprawnienia.</string>
     <string name="BetaMessage">Aplikacja jest w fazie Beta. Nic nie działa i nie wiadomo, dlaczego.</string>
     <string name="Button_Cancel">Anuluj</string>
+    <string name="settings">Ustawienia</string>
+    <string name="heightDown">Zmniejsz pułap</string>
+    <string name="heightUp">Zwiększ pułap</string>
+    <string name="rotateRight">Obróć w prawo</string>
+    <string name="rotateLeft">Obróć w lewo</string>
+    <string name="arrowRight">Przechyl w prawo</string>
+    <string name="arrowLeft">Przechyl w lewo</string>
+    <string name="arrowUp">Przechyl do przodu</string>
+    <string name="arrowDown">Przechyl do tyłu</string>
 </resources>
