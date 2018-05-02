@@ -4,12 +4,14 @@ import android.Manifest;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -37,7 +39,7 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         // Informacja o wersji beta
-        showBetaDialog();
+        // showBetaDialog();
 
         // Jeśli przyznano uprawnienia, to kontynuuj działanie
         if (checkPermissions())
@@ -229,86 +231,399 @@ public class MainActivity extends AppCompatActivity
         heightDown = findViewById(R.id.heightDown);
         settingsButton = findViewById(R.id.settingsButton);
 
-        // Metody setOnClickListener, które pozwalają wykonać kod po naciśnięciu przycisku
-        // TODO - Wysyłanie przez Wi-Fi
+        // TODO - Komunikacja przez Wi-Fi
 
-        // arrowUp - przechył do przodu
-        arrowUp.setOnClickListener(new View.OnClickListener()
+        // Wątek wykonujący pewne zadania
+        final Handler mHandler = new Handler();
+
+        // Wykorzystanie wątku mHandler dla przycisków sterujących
+        // _hold - akcja wykonywana podczas trzymania przycisku
+        // _release - akcja wykonywana przy puszczeniu przycisku
+
+        // arrowUp
+        // Akcja wykonywana podczas trzymania
+        final Runnable arrowUp_hold = new Runnable()
         {
             @Override
-            public void onClick(View v)
+            public void run()
+            {
+                Log.i("DroneControl","Holding arrowUp");
+                // Opóźnienie wykonania akcji [ms]
+                mHandler.postDelayed(this,100);
+            }
+        };
+
+        // Akcja wykonywana przy puszczeniu
+        final Runnable arrowUp_release = new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                Log.i("DroneControl","Released arrowUp");
+            }
+        };
+
+        // arrowDown
+        // Akcja wykonywana podczas trzymania
+        final Runnable arrowDown_hold = new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                Log.i("DroneControl","Holding arrowDown");
+                mHandler.postDelayed(this,100);
+            }
+        };
+
+        // Akcja wykonywana przy puszczeniu
+        final Runnable arrowDown_release = new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                Log.i("DroneControl","Released arrowDown");
+            }
+        };
+
+        // arrowLeft
+        // Akcja wykonywana podczas trzymania
+        final Runnable arrowLeft_hold = new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                Log.i("DroneControl","Holding arrowLeft");
+                mHandler.postDelayed(this,100);
+            }
+        };
+
+        // Akcja wykonywana przy puszczeniu
+        final Runnable arrowLeft_release = new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                Log.i("DroneControl","Released arrowLeft");
+            }
+        };
+
+        // arrowRight
+        // Akcja wykonywana podczas trzymania
+        final Runnable arrowRight_hold = new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                Log.i("DroneControl","Holding arrowRight");
+                mHandler.postDelayed(this,100);
+            }
+        };
+
+        // Akcja wykonywana przy puszczeniu
+        final Runnable arrowRight_release = new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                Log.i("DroneControl","Released arrowRight");
+            }
+        };
+
+        // rotateLeft
+        // Akcja wykonywana podczas trzymania
+        final Runnable rotateLeft_hold = new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                Log.i("DroneControl","Holding rotateLeft");
+                mHandler.postDelayed(this,100);
+            }
+        };
+
+        // Akcja wykonywana przy puszczeniu
+        final Runnable rotateLeft_release = new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                Log.i("DroneControl","Released rotateLeft");
+            }
+        };
+
+        // rotateRight
+        // Akcja wykonywana podczas trzymania
+        final Runnable rotateRight_hold = new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                Log.i("DroneControl","Holding rotateRight");
+                mHandler.postDelayed(this,100);
+            }
+        };
+
+        // Akcja wykonywana przy puszczeniu
+        final Runnable rotateRight_release = new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                Log.i("DroneControl","Released rotateRight");
+            }
+        };
+
+        // heightUp
+        // Akcja wykonywana podczas trzymania
+        final Runnable heightUp_hold = new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                Log.i("DroneControl","Holding heightUp");
+                mHandler.postDelayed(this,100);
+            }
+        };
+
+        // Akcja wykonywana przy puszczeniu
+        final Runnable heightUp_release = new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                Log.i("DroneControl","Released heightUp");
+            }
+        };
+
+        // heightDown
+        // Akcja wykonywana podczas trzymania
+        final Runnable heightDown_hold = new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                Log.i("DroneControl","Holding heightDown");
+                mHandler.postDelayed(this,100);
+            }
+        };
+
+        // Akcja wykonywana przy puszczeniu
+        final Runnable heightDown_release = new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                Log.i("DroneControl","Released heightDown");
+            }
+        };
+
+        // metody onTouchListener dla przycisków sterujących dronem
+
+        // arrowUp - przechył do przodu
+        arrowUp.setOnTouchListener(new View.OnTouchListener()
+        {
+            @Override
+            public boolean onTouch(View v, MotionEvent event)
             {
                 // Wysłanie komendy przez Wi-Fi
+                switch (event.getAction())
+                {
+                    case MotionEvent.ACTION_DOWN:
+                        mHandler.postDelayed(arrowUp_hold,10);
+                        mHandler.removeCallbacks(arrowUp_release);
+                        return true;
+
+                    case MotionEvent.ACTION_UP:
+                        mHandler.postDelayed(arrowUp_release,10);
+                        mHandler.removeCallbacks(arrowUp_hold);
+                        return true;
+
+                    default:
+                        break;
+                }
+                return true;
             }
         });
 
         // arrowDown - przechył do tyłu
-        arrowDown.setOnClickListener(new View.OnClickListener()
+        arrowDown.setOnTouchListener(new View.OnTouchListener()
         {
             @Override
-            public void onClick(View v)
+            public boolean onTouch(View v, MotionEvent event)
             {
                 // Wysłanie komendy przez Wi-Fi
+                switch (event.getAction())
+                {
+                    case MotionEvent.ACTION_DOWN:
+                        mHandler.postDelayed(arrowDown_hold,10);
+                        mHandler.removeCallbacks(arrowDown_release);
+                        return true;
+
+                    case MotionEvent.ACTION_UP:
+                        mHandler.postDelayed(arrowDown_release,10);
+                        mHandler.removeCallbacks(arrowDown_hold);
+                        return true;
+
+                    default:
+                        break;
+                }
+                return true;
             }
         });
 
         // arrowLeft - przechył w lewo
-        arrowLeft.setOnClickListener(new View.OnClickListener()
+        arrowLeft.setOnTouchListener(new View.OnTouchListener()
         {
             @Override
-            public void onClick(View v)
+            public boolean onTouch(View v, MotionEvent event)
             {
                 // Wysłanie komendy przez Wi-Fi
+                switch (event.getAction())
+                {
+                    case MotionEvent.ACTION_DOWN:
+                        mHandler.postDelayed(arrowLeft_hold,10);
+                        mHandler.removeCallbacks(arrowLeft_release);
+                        return true;
+
+                    case MotionEvent.ACTION_UP:
+                        mHandler.postDelayed(arrowLeft_release,10);
+                        mHandler.removeCallbacks(arrowLeft_hold);
+                        return true;
+
+                    default:
+                        break;
+                }
+                return true;
             }
         });
 
         // arrowRight - przechył w prawo
-        arrowRight.setOnClickListener(new View.OnClickListener()
+        arrowRight.setOnTouchListener(new View.OnTouchListener()
         {
             @Override
-            public void onClick(View v)
+            public boolean onTouch(View v, MotionEvent event)
             {
                 // Wysłanie komendy przez Wi-Fi
+                switch (event.getAction())
+                {
+                    case MotionEvent.ACTION_DOWN:
+                        mHandler.postDelayed(arrowRight_hold,10);
+                        mHandler.removeCallbacks(arrowRight_release);
+                        return true;
+
+                    case MotionEvent.ACTION_UP:
+                        mHandler.postDelayed(arrowRight_release,10);
+                        mHandler.removeCallbacks(arrowRight_hold);
+                        return true;
+
+                    default:
+                        break;
+                }
+                return true;
             }
         });
 
         // rotateLeft - obrót w lewo wokół osi pionowej
-        rotateLeft.setOnClickListener(new View.OnClickListener()
+        rotateLeft.setOnTouchListener(new View.OnTouchListener()
         {
             @Override
-            public void onClick(View v)
+            public boolean onTouch(View v, MotionEvent event)
             {
                 // Wysłanie komendy przez Wi-Fi
+                switch (event.getAction())
+                {
+                    case MotionEvent.ACTION_DOWN:
+                        mHandler.postDelayed(rotateLeft_hold,10);
+                        mHandler.removeCallbacks(rotateLeft_release);
+                        return true;
+
+                    case MotionEvent.ACTION_UP:
+                        mHandler.postDelayed(rotateLeft_release,10);
+                        mHandler.removeCallbacks(rotateLeft_hold);
+                        return true;
+
+                    default:
+                        break;
+                }
+                return true;
             }
         });
 
         // rotateRight - obrót w prawo wokół osi pionowej
-        rotateRight.setOnClickListener(new View.OnClickListener()
+        rotateRight.setOnTouchListener(new View.OnTouchListener()
         {
             @Override
-            public void onClick(View v)
+            public boolean onTouch(View v, MotionEvent event)
             {
                 // Wysłanie komendy przez Wi-Fi
+                switch (event.getAction())
+                {
+                    case MotionEvent.ACTION_DOWN:
+                        mHandler.postDelayed(rotateRight_hold,10);
+                        mHandler.removeCallbacks(rotateRight_release);
+                        return true;
+
+                    case MotionEvent.ACTION_UP:
+                        mHandler.postDelayed(rotateRight_release,10);
+                        mHandler.removeCallbacks(rotateRight_hold);
+                        return true;
+
+                    default:
+                        break;
+                }
+                return true;
             }
         });
 
         // heightUp - zwiększenie pułapu lotu
-        heightUp.setOnClickListener(new View.OnClickListener()
+        heightUp.setOnTouchListener(new View.OnTouchListener()
         {
             @Override
-            public void onClick(View v)
+            public boolean onTouch(View v, MotionEvent event)
             {
                 // Wysłanie komendy przez Wi-Fi
+                switch (event.getAction())
+                {
+                    case MotionEvent.ACTION_DOWN:
+                        mHandler.postDelayed(heightUp_hold,10);
+                        mHandler.removeCallbacks(heightUp_release);
+                        return true;
+
+                    case MotionEvent.ACTION_UP:
+                        mHandler.postDelayed(heightUp_release,10);
+                        mHandler.removeCallbacks(heightUp_hold);
+                        return true;
+
+                    default:
+                        break;
+                }
+                return true;
             }
         });
 
         // heightDown - zmniejszenie pułapu lotu
-        heightDown.setOnClickListener(new View.OnClickListener()
+        heightDown.setOnTouchListener(new View.OnTouchListener()
         {
             @Override
-            public void onClick(View v)
+            public boolean onTouch(View v, MotionEvent event)
             {
                 // Wysłanie komendy przez Wi-Fi
+                switch (event.getAction())
+                {
+                    case MotionEvent.ACTION_DOWN:
+                        mHandler.postDelayed(heightDown_hold,10);
+                        mHandler.removeCallbacks(heightDown_release);
+                        return true;
+
+                    case MotionEvent.ACTION_UP:
+                        mHandler.postDelayed(heightDown_release,10);
+                        mHandler.removeCallbacks(heightDown_hold);
+                        return true;
+
+                    default:
+                        break;
+                }
+                return true;
             }
         });
 
