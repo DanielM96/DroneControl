@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
+import android.os.AsyncTask;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -33,6 +34,8 @@ import java.util.Map;
 
 public class MainActivity extends AppCompatActivity
 {
+    static TcpClient mTcpClient;
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -232,6 +235,7 @@ public class MainActivity extends AppCompatActivity
         settingsButton = findViewById(R.id.settingsButton);
 
         // TODO - Komunikacja przez Wi-Fi
+        new ConnectTask().execute("");
 
         // Wątek wykonujący pewne zadania
         final Handler mHandler = new Handler();
@@ -239,6 +243,12 @@ public class MainActivity extends AppCompatActivity
         // Wykorzystanie wątku mHandler dla przycisków sterujących
         // _hold - akcja wykonywana podczas trzymania przycisku
         // _release - akcja wykonywana przy puszczeniu przycisku
+
+        // Wariant I
+        // Przy trzymaniu, wykonuj co 100 ms.
+
+        // Wariant II
+        // Wykonaj tylko raz (nie ma metody postDelayed).
 
         // arrowUp
         // Akcja wykonywana podczas trzymania
@@ -249,7 +259,8 @@ public class MainActivity extends AppCompatActivity
             {
                 Log.i("DroneControl","Holding arrowUp");
                 // Opóźnienie wykonania akcji [ms]
-                mHandler.postDelayed(this,100);
+                // II
+                // mHandler.postDelayed(this,100);
             }
         };
 
@@ -271,7 +282,8 @@ public class MainActivity extends AppCompatActivity
             public void run()
             {
                 Log.i("DroneControl","Holding arrowDown");
-                mHandler.postDelayed(this,100);
+                // II
+                //mHandler.postDelayed(this,100);
             }
         };
 
@@ -293,7 +305,8 @@ public class MainActivity extends AppCompatActivity
             public void run()
             {
                 Log.i("DroneControl","Holding arrowLeft");
-                mHandler.postDelayed(this,100);
+                // II
+                //mHandler.postDelayed(this,100);
             }
         };
 
@@ -315,7 +328,8 @@ public class MainActivity extends AppCompatActivity
             public void run()
             {
                 Log.i("DroneControl","Holding arrowRight");
-                mHandler.postDelayed(this,100);
+                // II
+                //mHandler.postDelayed(this,100);
             }
         };
 
@@ -337,7 +351,8 @@ public class MainActivity extends AppCompatActivity
             public void run()
             {
                 Log.i("DroneControl","Holding rotateLeft");
-                mHandler.postDelayed(this,100);
+                // II
+                //mHandler.postDelayed(this,100);
             }
         };
 
@@ -359,7 +374,8 @@ public class MainActivity extends AppCompatActivity
             public void run()
             {
                 Log.i("DroneControl","Holding rotateRight");
-                mHandler.postDelayed(this,100);
+                // II
+                //mHandler.postDelayed(this,100);
             }
         };
 
@@ -381,7 +397,8 @@ public class MainActivity extends AppCompatActivity
             public void run()
             {
                 Log.i("DroneControl","Holding heightUp");
-                mHandler.postDelayed(this,100);
+                // II
+                //mHandler.postDelayed(this,100);
             }
         };
 
@@ -403,7 +420,8 @@ public class MainActivity extends AppCompatActivity
             public void run()
             {
                 Log.i("DroneControl","Holding heightDown");
-                mHandler.postDelayed(this,100);
+                // II
+                //mHandler.postDelayed(this,100);
             }
         };
 
@@ -636,5 +654,88 @@ public class MainActivity extends AppCompatActivity
                 // TODO - AppSettings
             }
         });
+    }
+
+    /**
+     * ConnectTask
+     *
+     * Klasa do łączenia z serwerem w tle.
+     */
+
+    public static class ConnectTask extends AsyncTask<String, String, TcpClient>
+    {
+        @Override
+        protected TcpClient doInBackground(String... message)
+        {
+            // Tworzenie obiektu TcpClient
+            mTcpClient = new TcpClient(new TcpClient.OnMessageReceived()
+            {
+                @Override
+                public void messageReceived(String message)
+                {
+                    publishProgress(message);
+                }
+            });
+            mTcpClient.run();
+            if (mTcpClient != null)
+            {
+                mTcpClient.sendMessage("Started");
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onProgressUpdate(String... values)
+        {
+            super.onProgressUpdate(values);
+            Log.d("test", "Response: " + values[0]);
+        }
+    }
+
+    /**
+     * DisconnectTask
+     *
+     * Klasa do rozłączenia z serwerem w tle.
+     */
+
+    public static class DisconnectTask extends AsyncTask<Void, Void, Void>
+    {
+        @Override
+        protected Void doInBackground(Void... voids)
+        {
+            mTcpClient.stopClient();
+            mTcpClient = null;
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void nothing)
+        {
+            super.onPostExecute(nothing);
+        }
+    }
+
+    /**
+     * SendMessageTask
+     *
+     * Klasa do wysyłania wiadomości w tle.
+     */
+
+    public static class SendMessageTask extends AsyncTask<String, Void, Void>
+    {
+        @Override
+        protected Void doInBackground(String... params)
+        {
+            mTcpClient.sendMessage(params[0]);
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void nothing)
+        {
+            super.onPostExecute(nothing);
+        }
     }
 }
