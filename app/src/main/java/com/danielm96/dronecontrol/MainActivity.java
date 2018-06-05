@@ -235,7 +235,7 @@ public class MainActivity extends AppCompatActivity
         settingsButton = findViewById(R.id.settingsButton);
 
         // TODO - Komunikacja przez Wi-Fi
-        new ConnectTask().execute("");
+        new ConnectTask().execute();
 
         // Wątek wykonujący pewne zadania
         final Handler mHandler = new Handler();
@@ -258,6 +258,10 @@ public class MainActivity extends AppCompatActivity
             public void run()
             {
                 Log.i("DroneControl","Holding arrowUp");
+                if (mTcpClient != null)
+                {
+                    new SendMessageTask().execute("MOVE_FORWARD");
+                }
                 // Opóźnienie wykonania akcji [ms]
                 // II
                 // mHandler.postDelayed(this,100);
@@ -271,6 +275,7 @@ public class MainActivity extends AppCompatActivity
             public void run()
             {
                 Log.i("DroneControl","Released arrowUp");
+                new SendMessageTask().execute("STOP");
             }
         };
 
@@ -676,9 +681,11 @@ public class MainActivity extends AppCompatActivity
                     publishProgress(message);
                 }
             });
+            Log.d("TCP", "3,2,1,...");
             mTcpClient.run();
             if (mTcpClient != null)
             {
+                Log.d("TCP", "Go!");
                 mTcpClient.sendMessage("Started");
             }
 
