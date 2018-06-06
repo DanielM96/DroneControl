@@ -18,6 +18,13 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.Socket;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -34,7 +41,12 @@ import java.util.Map;
 
 public class MainActivity extends AppCompatActivity
 {
-    static TcpClient mTcpClient;
+    boolean socketStatus = false;
+    Socket socket;
+    String address = "192.168.43.40";
+    ClientTask conTask;
+    int port = 80;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -52,15 +64,15 @@ public class MainActivity extends AppCompatActivity
     }
 
     // BETA
-    private void showBetaDialog()
-    {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(R.string.BetaHeader);
-        builder.setMessage(R.string.BetaMessage);
-        builder.setPositiveButton(R.string.Button_OK,null);
-        AlertDialog dialog = builder.create();
-        dialog.show();
-    }
+//    private void showBetaDialog()
+//    {
+//        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+//        builder.setTitle(R.string.BetaHeader);
+//        builder.setMessage(R.string.BetaMessage);
+//        builder.setPositiveButton(R.string.Button_OK,null);
+//        AlertDialog dialog = builder.create();
+//        dialog.show();
+//    }
 
     // Sprawdzanie uprawnień
     private boolean checkPermissions()
@@ -235,7 +247,17 @@ public class MainActivity extends AppCompatActivity
         settingsButton = findViewById(R.id.settingsButton);
 
         // TODO - Komunikacja przez Wi-Fi
-        new ConnectTask().execute();
+        //new ConnectTask().execute();
+        if (socketStatus)
+        {
+            Toast.makeText(MainActivity.this, "Yyy synek!",Toast.LENGTH_SHORT).show();
+        }
+        else
+        {
+            socket = null;
+            conTask = new ClientTask(address);
+            conTask.execute("CON");
+        }
 
         // Wątek wykonujący pewne zadania
         final Handler mHandler = new Handler();
@@ -258,10 +280,9 @@ public class MainActivity extends AppCompatActivity
             public void run()
             {
                 Log.i("DroneControl","Holding arrowUp");
-                if (mTcpClient != null)
-                {
-                    new SendMessageTask().execute("MOVE_FORWARD");
-                }
+                String msg = "OKOK";
+                ClientTask task = new ClientTask(address);
+                task.execute(msg);
                 // Opóźnienie wykonania akcji [ms]
                 // II
                 // mHandler.postDelayed(this,100);
@@ -275,7 +296,9 @@ public class MainActivity extends AppCompatActivity
             public void run()
             {
                 Log.i("DroneControl","Released arrowUp");
-                new SendMessageTask().execute("STOP");
+                String msg = "NONO";
+                ClientTask task = new ClientTask(address);
+                task.execute(msg);
             }
         };
 
@@ -662,87 +685,73 @@ public class MainActivity extends AppCompatActivity
     }
 
     /**
-     * ConnectTask
+     * ClientTask
      *
-     * Klasa do łączenia z serwerem w tle.
+     * Klasa do komunikacji HTTP
      */
-
-    public static class ConnectTask extends AsyncTask<String, String, TcpClient>
+    public static class ClientTask extends AsyncTask<String,Void,String>
     {
-        @Override
-        protected TcpClient doInBackground(String... message)
+
+        String server;
+
+        ClientTask(String server)
         {
-            // Tworzenie obiektu TcpClient
-            mTcpClient = new TcpClient(new TcpClient.OnMessageReceived()
+            this.server = server;
+        }
+
+        @Override
+        protected String doInBackground(String... params)
+        {
+
+            StringBuilder chaine = new StringBuilder("");
+
+            final String val = params[0];
+            final String p = "http://"+ server+"/"+val;
+
+//            runOnUiThread(new Runnable()
+//            {
+//                @Override
+//                public void run()
+//                {
+//                    estado.setText(p);
+//                }
+//            });
+
+            String serverResponse = "";
+            try
             {
-                @Override
-                public void messageReceived(String message)
+                URL url = new URL(p);
+                HttpURLConnection connection = (HttpURLConnection)url.openConnection();
+                connection.setRequestMethod("GET");
+                connection.connect();
+                InputStream inputStream = connection.getInputStream();
+
+                BufferedReader rd = new BufferedReader(new InputStreamReader(inputStream));
+                String line;
+                while ((line = rd.readLine()) != null)
                 {
-                    publishProgress(message);
+                    chaine.append(line);
                 }
-            });
-            Log.d("TCP", "3,2,1,...");
-            mTcpClient.run();
-            if (mTcpClient != null)
+                inputStream.close();
+
+                System.out.println("chaine: " + chaine.toString());
+
+                connection.disconnect();
+
+            }
+            catch (IOException e)
             {
-                Log.d("TCP", "Go!");
-                mTcpClient.sendMessage("Started");
+                e.printStackTrace();
+                serverResponse = e.getMessage();
             }
 
-            return null;
+            return serverResponse;
         }
 
         @Override
-        protected void onProgressUpdate(String... values)
+        protected void onPostExecute(String s)
         {
-            super.onProgressUpdate(values);
-            Log.d("test", "Response: " + values[0]);
-        }
-    }
 
-    /**
-     * DisconnectTask
-     *
-     * Klasa do rozłączenia z serwerem w tle.
-     */
-
-    public static class DisconnectTask extends AsyncTask<Void, Void, Void>
-    {
-        @Override
-        protected Void doInBackground(Void... voids)
-        {
-            mTcpClient.stopClient();
-            mTcpClient = null;
-
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void nothing)
-        {
-            super.onPostExecute(nothing);
-        }
-    }
-
-    /**
-     * SendMessageTask
-     *
-     * Klasa do wysyłania wiadomości w tle.
-     */
-
-    public static class SendMessageTask extends AsyncTask<String, Void, Void>
-    {
-        @Override
-        protected Void doInBackground(String... params)
-        {
-            mTcpClient.sendMessage(params[0]);
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void nothing)
-        {
-            super.onPostExecute(nothing);
         }
     }
 }
