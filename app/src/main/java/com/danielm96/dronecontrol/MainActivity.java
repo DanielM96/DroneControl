@@ -41,12 +41,27 @@ import java.util.Map;
 
 public class MainActivity extends AppCompatActivity
 {
+    // Podstawowe pola
+    // socketStatus - pozwala ustalić, czy socket jest w użyciu (=true)
     boolean socketStatus = false;
+
+    // socket - socket HTTP
     Socket socket;
+
+    // address - adres IP modułu Wi-Fi drona -- docelowo nadawany w ustawieniach
     String address = "192.168.43.40";
+
+    // conTask - obiekt klasy ClientTask do wysyłania żądań HTTP
     ClientTask conTask;
-    int port = 80;
+
+    // port - numer portu -- niewykorzystywany
+    // int port = 80;
+
+    // isEnginePoweredOn - zmienna logiczna przechowująca stan silników
     boolean isEnginePoweredOn = false;
+
+    // ENGINE_STATE - etykieta wykorzystywana przy zapisywaniu stanu
+    private static final String ENGINE_STATE = "ENGINE_STATE";
 
 
     @Override
@@ -56,6 +71,13 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         // Informacja o wersji beta
         // showBetaDialog();
+
+        // Jeśli poprzedni stan został zapisany, przywróć go
+        if (savedInstanceState != null)
+        {
+            // Przywróc poprzednią wartość stanu silników
+            isEnginePoweredOn = savedInstanceState.getBoolean(ENGINE_STATE, isEnginePoweredOn);
+        }
 
         // Jeśli przyznano uprawnienia, to kontynuuj działanie
         if (checkPermissions())
@@ -248,6 +270,18 @@ public class MainActivity extends AppCompatActivity
         heightDown = findViewById(R.id.heightDown);
         engines = findViewById(R.id.engines);
         settingsButton = findViewById(R.id.settingsButton);
+
+        // Nadanie początkowego zasobu przyciskowi engines w zależności od stanu silników
+        if (isEnginePoweredOn)
+        {
+            // Silniki włączone - zielona ikona
+            engines.setImageResource(R.drawable.power_on);
+        }
+        else
+        {
+            // Silniki wyłączone - biała ikona
+            engines.setImageResource(R.drawable.power_off);
+        }
 
         // Sprawdź, czy socket jest pusty
         if (socketStatus)
@@ -798,5 +832,15 @@ public class MainActivity extends AppCompatActivity
         {
 
         }
+    }
+
+    // Zapisywanie bieżącego stanu silników w razie zmiany orientacji
+    @Override
+    protected void onSaveInstanceState(Bundle outState)
+    {
+        super.onSaveInstanceState(outState);
+
+        // Zapisz bieżący stan silników
+        outState.putBoolean(ENGINE_STATE, isEnginePoweredOn);
     }
 }

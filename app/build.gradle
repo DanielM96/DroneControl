@@ -6,7 +6,7 @@ android {
         applicationId "com.danielm96.dronecontrol"
         minSdkVersion 23
         targetSdkVersion 27
-        versionName '1.1.1.180610.1537'
+        versionName '1.1.1.180610.1909'
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         versionCode 1
     }
