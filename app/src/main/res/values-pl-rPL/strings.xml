@@ -12,4 +12,7 @@
     <string name="arrowLeft">Przechyl w lewo</string>
     <string name="arrowUp">Przechyl do przodu</string>
     <string name="arrowDown">Przechyl do tyłu</string>
+    <string name="engines">Silniki</string>
+    <string name="EnginesPoweredOn">Włączono silniki</string>
+    <string name="EnginesPoweredOff">Wyłączono silniki</string>
 </resources>

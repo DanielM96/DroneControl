@@ -46,6 +46,7 @@ public class MainActivity extends AppCompatActivity
     String address = "192.168.43.40";
     ClientTask conTask;
     int port = 80;
+    boolean isEnginePoweredOn = false;
 
 
     @Override
@@ -229,6 +230,7 @@ public class MainActivity extends AppCompatActivity
                     rotateRight,
                     heightUp,
                     heightDown,
+                    engines,
                     settingsButton;
 
         // Obraz drona
@@ -244,10 +246,10 @@ public class MainActivity extends AppCompatActivity
         rotateRight = findViewById(R.id.rotateRight);
         heightUp = findViewById(R.id.heightUp);
         heightDown = findViewById(R.id.heightDown);
+        engines = findViewById(R.id.engines);
         settingsButton = findViewById(R.id.settingsButton);
 
-        // TODO - Komunikacja przez Wi-Fi
-        //new ConnectTask().execute();
+        // Sprawdź, czy socket jest pusty
         if (socketStatus)
         {
             Toast.makeText(MainActivity.this, "Yyy synek!",Toast.LENGTH_SHORT).show();
@@ -670,6 +672,49 @@ public class MainActivity extends AppCompatActivity
                         break;
                 }
                 return true;
+            }
+        });
+
+        // engines - sterowanie silnikami
+        engines.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                // Silniki są wyłączone - naciśnięcie powoduje włączenie
+                if (!isEnginePoweredOn)
+                {
+                    // Zmień wartość zmiennej logicznej
+                    isEnginePoweredOn = true;
+
+                    // Wyślij komendę uruchomienia silników
+                    String msg = "ENE";
+                    ClientTask task = new ClientTask(address);
+                    task.execute(msg);
+
+                    // Zmień wyświetlaną ikonę
+                    ((ImageButton)v).setImageResource(R.drawable.power_on);
+
+                    // Informacja o włączeniu silników
+                    Toast.makeText(MainActivity.this, R.string.EnginesPoweredOn, Toast.LENGTH_SHORT).show();
+                }
+                else
+                {
+                    // Silniki są włączone - naciśnięcie powoduje wyłączenie
+                    // Zmień wartość zmiennej logicznej
+                    isEnginePoweredOn = false;
+
+                    // Wyślij komendę wyłączenia silników
+                    String msg = "END";
+                    ClientTask task = new ClientTask(address);
+                    task.execute(msg);
+
+                    // Zmień wyświetlaną ikonę
+                    ((ImageButton)v).setImageResource(R.drawable.power_off);
+
+                    // Informacja o wyłączeniu silników
+                    Toast.makeText(MainActivity.this, R.string.EnginesPoweredOff, Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
