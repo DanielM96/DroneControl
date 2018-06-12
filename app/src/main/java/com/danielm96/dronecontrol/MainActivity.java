@@ -308,6 +308,20 @@ public class MainActivity extends AppCompatActivity
         // Wariant II
         // Wykonaj tylko raz (nie ma metody postDelayed).
 
+        // stopMove
+        // Akcja wykonywana przy puszczeniu przycisków sterujących
+        final Runnable stopMove = new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                Log.i("DroneControl", "Stopped move");
+                String msg = "STOP";
+                ClientTask task = new ClientTask(address);
+                task.execute(msg);
+            }
+        };
+
         // arrowUp
         // Akcja wykonywana podczas trzymania
         final Runnable arrowUp_hold = new Runnable()
@@ -316,7 +330,7 @@ public class MainActivity extends AppCompatActivity
             public void run()
             {
                 Log.i("DroneControl","Holding arrowUp");
-                String msg = "OKOK";
+                String msg = "FORWARD";
                 ClientTask task = new ClientTask(address);
                 task.execute(msg);
                 // Opóźnienie wykonania akcji [ms]
@@ -332,7 +346,7 @@ public class MainActivity extends AppCompatActivity
             public void run()
             {
                 Log.i("DroneControl","Released arrowUp");
-                String msg = "NONO";
+                String msg = "STOP";
                 ClientTask task = new ClientTask(address);
                 task.execute(msg);
             }
@@ -346,6 +360,9 @@ public class MainActivity extends AppCompatActivity
             public void run()
             {
                 Log.i("DroneControl","Holding arrowDown");
+                String msg = "BACKWARD";
+                ClientTask task = new ClientTask(address);
+                task.execute(msg);
                 // II
                 //mHandler.postDelayed(this,100);
             }
@@ -369,6 +386,9 @@ public class MainActivity extends AppCompatActivity
             public void run()
             {
                 Log.i("DroneControl","Holding arrowLeft");
+                String msg = "LEFT";
+                ClientTask task = new ClientTask(address);
+                task.execute(msg);
                 // II
                 //mHandler.postDelayed(this,100);
             }
@@ -392,6 +412,9 @@ public class MainActivity extends AppCompatActivity
             public void run()
             {
                 Log.i("DroneControl","Holding arrowRight");
+                String msg = "RIGHT";
+                ClientTask task = new ClientTask(address);
+                task.execute(msg);
                 // II
                 //mHandler.postDelayed(this,100);
             }
@@ -415,6 +438,9 @@ public class MainActivity extends AppCompatActivity
             public void run()
             {
                 Log.i("DroneControl","Holding rotateLeft");
+                String msg = "R_LEFT";
+                ClientTask task = new ClientTask(address);
+                task.execute(msg);
                 // II
                 //mHandler.postDelayed(this,100);
             }
@@ -438,6 +464,9 @@ public class MainActivity extends AppCompatActivity
             public void run()
             {
                 Log.i("DroneControl","Holding rotateRight");
+                String msg = "R_RIGHT";
+                ClientTask task = new ClientTask(address);
+                task.execute(msg);
                 // II
                 //mHandler.postDelayed(this,100);
             }
@@ -461,6 +490,9 @@ public class MainActivity extends AppCompatActivity
             public void run()
             {
                 Log.i("DroneControl","Holding heightUp");
+                String msg = "UP";
+                ClientTask task = new ClientTask(address);
+                task.execute(msg);
                 // II
                 //mHandler.postDelayed(this,100);
             }
@@ -484,6 +516,9 @@ public class MainActivity extends AppCompatActivity
             public void run()
             {
                 Log.i("DroneControl","Holding heightDown");
+                String msg = "DOWN";
+                ClientTask task = new ClientTask(address);
+                task.execute(msg);
                 // II
                 //mHandler.postDelayed(this,100);
             }
@@ -512,11 +547,11 @@ public class MainActivity extends AppCompatActivity
                 {
                     case MotionEvent.ACTION_DOWN:
                         mHandler.postDelayed(arrowUp_hold,10);
-                        mHandler.removeCallbacks(arrowUp_release);
+                        mHandler.removeCallbacks(stopMove);
                         return true;
 
                     case MotionEvent.ACTION_UP:
-                        mHandler.postDelayed(arrowUp_release,10);
+                        mHandler.postDelayed(stopMove,10);
                         mHandler.removeCallbacks(arrowUp_hold);
                         return true;
 
@@ -538,11 +573,11 @@ public class MainActivity extends AppCompatActivity
                 {
                     case MotionEvent.ACTION_DOWN:
                         mHandler.postDelayed(arrowDown_hold,10);
-                        mHandler.removeCallbacks(arrowDown_release);
+                        mHandler.removeCallbacks(stopMove);
                         return true;
 
                     case MotionEvent.ACTION_UP:
-                        mHandler.postDelayed(arrowDown_release,10);
+                        mHandler.postDelayed(stopMove,10);
                         mHandler.removeCallbacks(arrowDown_hold);
                         return true;
 
@@ -564,11 +599,11 @@ public class MainActivity extends AppCompatActivity
                 {
                     case MotionEvent.ACTION_DOWN:
                         mHandler.postDelayed(arrowLeft_hold,10);
-                        mHandler.removeCallbacks(arrowLeft_release);
+                        mHandler.removeCallbacks(stopMove);
                         return true;
 
                     case MotionEvent.ACTION_UP:
-                        mHandler.postDelayed(arrowLeft_release,10);
+                        mHandler.postDelayed(stopMove,10);
                         mHandler.removeCallbacks(arrowLeft_hold);
                         return true;
 
@@ -590,11 +625,11 @@ public class MainActivity extends AppCompatActivity
                 {
                     case MotionEvent.ACTION_DOWN:
                         mHandler.postDelayed(arrowRight_hold,10);
-                        mHandler.removeCallbacks(arrowRight_release);
+                        mHandler.removeCallbacks(stopMove);
                         return true;
 
                     case MotionEvent.ACTION_UP:
-                        mHandler.postDelayed(arrowRight_release,10);
+                        mHandler.postDelayed(stopMove,10);
                         mHandler.removeCallbacks(arrowRight_hold);
                         return true;
 
@@ -616,11 +651,11 @@ public class MainActivity extends AppCompatActivity
                 {
                     case MotionEvent.ACTION_DOWN:
                         mHandler.postDelayed(rotateLeft_hold,10);
-                        mHandler.removeCallbacks(rotateLeft_release);
+                        mHandler.removeCallbacks(stopMove);
                         return true;
 
                     case MotionEvent.ACTION_UP:
-                        mHandler.postDelayed(rotateLeft_release,10);
+                        mHandler.postDelayed(stopMove,10);
                         mHandler.removeCallbacks(rotateLeft_hold);
                         return true;
 
@@ -642,11 +677,11 @@ public class MainActivity extends AppCompatActivity
                 {
                     case MotionEvent.ACTION_DOWN:
                         mHandler.postDelayed(rotateRight_hold,10);
-                        mHandler.removeCallbacks(rotateRight_release);
+                        mHandler.removeCallbacks(stopMove);
                         return true;
 
                     case MotionEvent.ACTION_UP:
-                        mHandler.postDelayed(rotateRight_release,10);
+                        mHandler.postDelayed(stopMove,10);
                         mHandler.removeCallbacks(rotateRight_hold);
                         return true;
 
@@ -668,11 +703,11 @@ public class MainActivity extends AppCompatActivity
                 {
                     case MotionEvent.ACTION_DOWN:
                         mHandler.postDelayed(heightUp_hold,10);
-                        mHandler.removeCallbacks(heightUp_release);
+                        mHandler.removeCallbacks(stopMove);
                         return true;
 
                     case MotionEvent.ACTION_UP:
-                        mHandler.postDelayed(heightUp_release,10);
+                        mHandler.postDelayed(stopMove,10);
                         mHandler.removeCallbacks(heightUp_hold);
                         return true;
 
@@ -694,11 +729,11 @@ public class MainActivity extends AppCompatActivity
                 {
                     case MotionEvent.ACTION_DOWN:
                         mHandler.postDelayed(heightDown_hold,10);
-                        mHandler.removeCallbacks(heightDown_release);
+                        mHandler.removeCallbacks(stopMove);
                         return true;
 
                     case MotionEvent.ACTION_UP:
-                        mHandler.postDelayed(heightDown_release,10);
+                        mHandler.postDelayed(stopMove,10);
                         mHandler.removeCallbacks(heightDown_hold);
                         return true;
 
@@ -722,7 +757,7 @@ public class MainActivity extends AppCompatActivity
                     isEnginePoweredOn = true;
 
                     // Wyślij komendę uruchomienia silników
-                    String msg = "ENE";
+                    String msg = "POWER";
                     ClientTask task = new ClientTask(address);
                     task.execute(msg);
 
@@ -739,7 +774,7 @@ public class MainActivity extends AppCompatActivity
                     isEnginePoweredOn = false;
 
                     // Wyślij komendę wyłączenia silników
-                    String msg = "END";
+                    String msg = "POWER";
                     ClientTask task = new ClientTask(address);
                     task.execute(msg);
 
