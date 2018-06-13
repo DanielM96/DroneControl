@@ -69,8 +69,6 @@ public class MainActivity extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        // Informacja o wersji beta
-        // showBetaDialog();
 
         // Jeśli poprzedni stan został zapisany, przywróć go
         if (savedInstanceState != null)
@@ -85,17 +83,6 @@ public class MainActivity extends AppCompatActivity
             startApp();
         }
     }
-
-    // BETA
-//    private void showBetaDialog()
-//    {
-//        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-//        builder.setTitle(R.string.BetaHeader);
-//        builder.setMessage(R.string.BetaMessage);
-//        builder.setPositiveButton(R.string.Button_OK,null);
-//        AlertDialog dialog = builder.create();
-//        dialog.show();
-//    }
 
     // Sprawdzanie uprawnień
     private boolean checkPermissions()
@@ -339,19 +326,6 @@ public class MainActivity extends AppCompatActivity
             }
         };
 
-        // Akcja wykonywana przy puszczeniu
-        final Runnable arrowUp_release = new Runnable()
-        {
-            @Override
-            public void run()
-            {
-                Log.i("DroneControl","Released arrowUp");
-                String msg = "STOP";
-                ClientTask task = new ClientTask(address);
-                task.execute(msg);
-            }
-        };
-
         // arrowDown
         // Akcja wykonywana podczas trzymania
         final Runnable arrowDown_hold = new Runnable()
@@ -365,16 +339,6 @@ public class MainActivity extends AppCompatActivity
                 task.execute(msg);
                 // II
                 //mHandler.postDelayed(this,100);
-            }
-        };
-
-        // Akcja wykonywana przy puszczeniu
-        final Runnable arrowDown_release = new Runnable()
-        {
-            @Override
-            public void run()
-            {
-                Log.i("DroneControl","Released arrowDown");
             }
         };
 
@@ -394,16 +358,6 @@ public class MainActivity extends AppCompatActivity
             }
         };
 
-        // Akcja wykonywana przy puszczeniu
-        final Runnable arrowLeft_release = new Runnable()
-        {
-            @Override
-            public void run()
-            {
-                Log.i("DroneControl","Released arrowLeft");
-            }
-        };
-
         // arrowRight
         // Akcja wykonywana podczas trzymania
         final Runnable arrowRight_hold = new Runnable()
@@ -417,16 +371,6 @@ public class MainActivity extends AppCompatActivity
                 task.execute(msg);
                 // II
                 //mHandler.postDelayed(this,100);
-            }
-        };
-
-        // Akcja wykonywana przy puszczeniu
-        final Runnable arrowRight_release = new Runnable()
-        {
-            @Override
-            public void run()
-            {
-                Log.i("DroneControl","Released arrowRight");
             }
         };
 
@@ -446,16 +390,6 @@ public class MainActivity extends AppCompatActivity
             }
         };
 
-        // Akcja wykonywana przy puszczeniu
-        final Runnable rotateLeft_release = new Runnable()
-        {
-            @Override
-            public void run()
-            {
-                Log.i("DroneControl","Released rotateLeft");
-            }
-        };
-
         // rotateRight
         // Akcja wykonywana podczas trzymania
         final Runnable rotateRight_hold = new Runnable()
@@ -469,16 +403,6 @@ public class MainActivity extends AppCompatActivity
                 task.execute(msg);
                 // II
                 //mHandler.postDelayed(this,100);
-            }
-        };
-
-        // Akcja wykonywana przy puszczeniu
-        final Runnable rotateRight_release = new Runnable()
-        {
-            @Override
-            public void run()
-            {
-                Log.i("DroneControl","Released rotateRight");
             }
         };
 
@@ -498,16 +422,6 @@ public class MainActivity extends AppCompatActivity
             }
         };
 
-        // Akcja wykonywana przy puszczeniu
-        final Runnable heightUp_release = new Runnable()
-        {
-            @Override
-            public void run()
-            {
-                Log.i("DroneControl","Released heightUp");
-            }
-        };
-
         // heightDown
         // Akcja wykonywana podczas trzymania
         final Runnable heightDown_hold = new Runnable()
@@ -521,16 +435,6 @@ public class MainActivity extends AppCompatActivity
                 task.execute(msg);
                 // II
                 //mHandler.postDelayed(this,100);
-            }
-        };
-
-        // Akcja wykonywana przy puszczeniu
-        final Runnable heightDown_release = new Runnable()
-        {
-            @Override
-            public void run()
-            {
-                Log.i("DroneControl","Released heightDown");
             }
         };
 
