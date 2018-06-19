@@ -18,4 +18,5 @@
     <string name="engines">Engines</string>
     <string name="EnginesPoweredOn">Engines powered on</string>
     <string name="EnginesPoweredOff">Engines powered off</string>
+    <string name="SocketNotNull">Socket is not null and cannot be reused.</string>
 </resources>

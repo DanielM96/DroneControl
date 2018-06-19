@@ -15,4 +15,5 @@
     <string name="engines">Silniki</string>
     <string name="EnginesPoweredOn">Włączono silniki</string>
     <string name="EnginesPoweredOff">Wyłączono silniki</string>
+    <string name="SocketNotNull">Socket nie jest pusty i nie może zostać użyty ponownie.</string>
 </resources>

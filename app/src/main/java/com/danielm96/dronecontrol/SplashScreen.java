@@ -5,18 +5,16 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 /**
- * SplashScreen.java
- *
+ * SplashScreen
+ * <p>
  * Ekran powitalny dla aplikacji i przejście do MainActivity.
  */
 
-public class SplashScreen extends AppCompatActivity
-{
+public class SplashScreen extends AppCompatActivity {
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Intent intent = new Intent(this,MainActivity.class);
+        Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
         finish();
     }
